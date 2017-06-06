@@ -16,13 +16,6 @@ public class TemplateEngineTest {
     }
 
     @Test
-    public void empty_string_transforms_to_empty_string() throws Exception {
-        String result = templateEngine.evaluate("");
-
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
     public void string_with_no_template_variables_transforms_to_the_very_same_string() throws Exception {
         String result = templateEngine.evaluate("Hi There!");
 
