@@ -1,6 +1,8 @@
 package it.pierodibello.kata;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Template {
     private String templateString;
@@ -16,10 +18,16 @@ public class Template {
             String expression = "{$" + key + "}";
             templateString = templateString.replace(expression, variables.get(key));
         }
-        if (templateString.contains("{$")) {
-            throw new MissingValueException();
+        Matcher matcher = matches(".*(\\{\\$.+\\}).*");
+        if (matcher.matches()) {
+            throw new MissingValueException("No value for " + matcher.group(1));
         }
         return templateString;
+    }
+
+    private Matcher matches(String regex) {
+        Pattern p = Pattern.compile(regex);
+        return p.matcher(templateString);
     }
 
     public void set(String key, String value) {

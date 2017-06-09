@@ -44,11 +44,22 @@ public class TemplateTest {
     @Test
     public void gives_error_if_template_variable_does_not_exist_in_the_map() throws Exception {
         try {
-            new Template("Hi {$name}!").evaluate();
-            fail("should throw exception");
-        } catch (Exception e) {
-            assertEquals(MissingValueException.class, e.getClass());
+            new Template("No value for {$foo}").evaluate();
+            fail("should throw exception since foo variable in the template is not bound to any variable set");
+        } catch (Exception expected) {
+            assertEquals(MissingValueException.class, expected.getClass());
+            assertEquals("No value for {$foo}", expected.getMessage());
         }
+    }
+
+    @Test
+    public void ignores_missing_variables() throws Exception {
+        template = new Template("Hi there!");
+        template.set("unbound", "anytext");
+
+        String result = template.evaluate();
+
+        assertEquals("Hi there!", result);
     }
 
     @Test
